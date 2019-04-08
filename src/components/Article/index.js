@@ -4,7 +4,7 @@ import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import marked from 'marked';
-import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../../constants/actionTypes';
+import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED, ADD_ARTICLE_SESSION_SET } from '../../constants/actionTypes';
 
 const mapStateToProps = state => ({
   ...state.article,
@@ -15,7 +15,9 @@ const mapDispatchToProps = dispatch => ({
   onLoad: payload =>
     dispatch({ type: ARTICLE_PAGE_LOADED, payload }),
   onUnload: () =>
-    dispatch({ type: ARTICLE_PAGE_UNLOADED })
+    dispatch({ type: ARTICLE_PAGE_UNLOADED }),
+  addToSession: id => 
+    dispatch({type: ADD_ARTICLE_SESSION_SET, id })
 });
 
 class Article extends React.Component {
@@ -24,6 +26,7 @@ class Article extends React.Component {
       agent.Articles.get(this.props.match.params.id),
       agent.Comments.forArticle(this.props.match.params.id)
     ]));
+    this.props.addToSession(this.props.match.params.id);
   }
 
   componentWillUnmount() {
