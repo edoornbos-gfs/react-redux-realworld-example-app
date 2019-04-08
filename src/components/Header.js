@@ -1,5 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => ({
+  sessionSet: state.sessionSet
+});
 
 const LoggedOutView = props => {
   if (!props.currentUser) {
@@ -24,6 +29,11 @@ const LoggedOutView = props => {
           </Link>
         </li>
 
+        <li classname="nav-item">
+          <p className="nav-link"> 
+          Viewed articles: {props.sessionCount} 
+          </p>
+        </li>
       </ul>
     );
   }
@@ -62,6 +72,12 @@ const LoggedInView = props => {
           </Link>
         </li>
 
+        <li classname="nav-item">
+          <p className="nav-link"> 
+          Viewed articles: {props.sessionCount} 
+          </p>
+        </li>
+
       </ul>
     );
   }
@@ -79,13 +95,17 @@ class Header extends React.Component {
             {this.props.appName.toLowerCase()}
           </Link>
 
-          <LoggedOutView currentUser={this.props.currentUser} />
+          <LoggedOutView 
+          currentUser={this.props.currentUser} 
+          sessionCount={this.props.sessionSet.size} />
 
-          <LoggedInView currentUser={this.props.currentUser} />
+          <LoggedInView 
+          currentUser={this.props.currentUser} 
+          sessionCount={this.props.sessionSet.size}/>
         </div>
       </nav>
     );
   }
 }
 
-export default Header;
+export default connect (mapStateToProps)(Header);
